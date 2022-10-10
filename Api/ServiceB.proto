@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "ServiceB";
+
+package ServiceB;
+
+service ServiceB {
+    rpc GetItem (GetItemRequest) returns (GetItemResponse);
+}
+
+message GetItemRequest {
+    string message = 1;
+}
+
+message GetItemResponse {
+    string message = 1;
+}
