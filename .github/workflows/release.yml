@@ -18,13 +18,21 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/peterkneale.microservices.b
+          tags: |
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+            type=sha
 
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile          
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/peterkneale.microservices.b:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
